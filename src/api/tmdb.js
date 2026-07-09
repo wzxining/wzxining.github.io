@@ -1,6 +1,6 @@
 // TMDB API 核心服务
 const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4YmNlZDVjMjQ0MDJjMjM0NzBiOTgzZDNlMDczNDQzMyIsIm5iZiI6MTc4MzU2NTA5OC4yNjQsInN1YiI6IjZhNGYwYjJhOTRhYzRhZmZhZGEwOTE3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.M_iuzBK8HIqwwOAZJwvoMiQlCRQEH09ODist-P1vjJc'
-const BASE_URL = 'https://api.themoviedb.org/3'
+const BASE_URL = 'https://api.tmdb.org/3'
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 
 // 海报占位图（深色底 + 提示文字）

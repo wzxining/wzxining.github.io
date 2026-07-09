@@ -17,16 +17,20 @@ export const useMovieStore = defineStore('movie', () => {
 
   // 加载首页数据
   async function loadHomeData() {
-    const [hot, latest, domestic, international] = await Promise.all([
-      fetchHotMovies(),
-      fetchLatestMovies(),
-      fetchDomesticMovies(),
-      fetchInternationalMovies()
-    ])
-    hotMovies.value = hot
-    latestMovies.value = latest
-    domesticMovies.value = domestic
-    internationalMovies.value = international
+    try {
+      const [hot, latest, domestic, international] = await Promise.all([
+        fetchHotMovies(),
+        fetchLatestMovies(),
+        fetchDomesticMovies(),
+        fetchInternationalMovies()
+      ])
+      hotMovies.value = hot
+      latestMovies.value = latest
+      domesticMovies.value = domestic
+      internationalMovies.value = international
+    } catch (err) {
+      console.error('首页数据加载失败:', err)
+    }
   }
 
   // 加载电影列表（支持筛选+分页）
