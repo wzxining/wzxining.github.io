@@ -142,9 +142,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFavoriteStore } from '@/stores/favorite.js'
 import { useUserStore } from '@/stores/user.js'
-import { fetchMovieById, fetchMovies } from '@/api/index.js'
+import { fetchMovieById, fetchSimilarMovies } from '@/api/index.js'
 import { formatRating, formatDate, formatRuntime } from '@/utils/format.js'
-import { mockMovies } from '@/mock/movies.js'
 
 const route = useRoute()
 const favStore = useFavoriteStore()
@@ -168,11 +167,8 @@ async function loadMovie() {
   const data = await fetchMovieById(id)
   if (data) {
     movie.value = data
-    // 加载同类型电影作为推荐
-    const similar = mockMovies
-      .filter(m => m.id !== id && m.genres.some(g => data.genres.includes(g)))
-      .slice(0, 6)
-    similarMovies.value = similar
+    // 通过 TMDB 获取相似电影推荐
+    similarMovies.value = await fetchSimilarMovies(id, 6)
   } else {
     notFound.value = true
   }

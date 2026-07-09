@@ -122,8 +122,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFavoriteStore } from '@/stores/favorite.js'
-import { fetchMovieById } from '@/api/index.js'
-import { mockMovies } from '@/mock/movies.js'
+import { fetchMovieById, fetchSimilarMovies } from '@/api/index.js'
 import { formatRating, formatRuntime } from '@/utils/format.js'
 
 const route = useRoute()
@@ -132,15 +131,9 @@ const favStore = useFavoriteStore()
 const movie = ref(null)
 const notFound = ref(false)
 const isPlaying = ref(true)
+const relatedMovies = ref([])
 
 const isFav = computed(() => movie.value && favStore.isFavorite(movie.value.id))
-
-const relatedMovies = computed(() => {
-  if (!movie.value) return []
-  return mockMovies
-    .filter(m => m.id !== movie.value.id && m.genres.some(g => movie.value.genres.includes(g)))
-    .slice(0, 5)
-})
 
 function togglePlay() {
   isPlaying.value = !isPlaying.value
@@ -164,9 +157,11 @@ async function loadMovie() {
   const id = Number(route.params.id)
   movie.value = null
   notFound.value = false
+  relatedMovies.value = []
   const data = await fetchMovieById(id)
   if (data) {
     movie.value = data
+    relatedMovies.value = await fetchSimilarMovies(id, 5)
   } else {
     notFound.value = true
   }
